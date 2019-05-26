@@ -1,12 +1,5 @@
 <?php
 
-/*
-$startTime = microtime(1);
-$startMem  = memory_get_usage();
-session_start();
-session_cache_limiter('private');
-session_cache_expire(0);
-*/
 $length = 32;
 $_SESSION['token'] = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $length);
 $_SESSION['token_expire'] = time() + 3600;
@@ -23,12 +16,9 @@ if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
 ?>
     <!DOCTYPE html>
     <html>
-    <head>
-      <title>Software Security Shop</title>
-      <?php if (file_exists(__DIR__ . '/_header.php')): ?>
-        <?php include_once(__DIR__ . '/_header.php'); ?>
-      <?php endif; ?>
-    </head>
+    <?php if (file_exists(__DIR__ . '/_header.php')): ?>
+      <?php include_once(__DIR__ . '/_header.php'); ?>
+    <?php endif; ?>
     <body>
     
     <?php
