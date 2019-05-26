@@ -23,13 +23,13 @@ if($_SESSION['token'] != $_POST['token']){
             $length = 64;
             $_SESSION['orderConfirmation'] = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $length);
             $cartItems = json_decode($_POST['hiddencheckout']);
-            
+
             ?>
             <!DOCTYPE html>
             <html>
-            	<?php if (file_exists(__DIR__ . '/_header.php')): ?>
-            	  <?php include_once(__DIR__ . '/_header.php'); ?>
-            	<?php endif; ?>
+          		<?php if (file_exists(__DIR__ . '/_header.php')): ?>
+          	    <?php include_once(__DIR__ . '/_header.php'); ?>
+          	  <?php endif; ?>
             	<body class="loggedin"><?php echo $_SESSION['orderConfirmation']; ?>
             		<nav class="navtop">
             			<div>
@@ -48,7 +48,7 @@ if($_SESSION['token'] != $_POST['token']){
                             <table style="width:100%">
                               <tr>
                                 <th>Item</th>
-                                <th>Quantity</th> 
+                                <th>Quantity</th>
                                 <th>Price</th>
                               </tr>
                                 <?php foreach($cartItems as $ci): ?>
@@ -60,17 +60,17 @@ if($_SESSION['token'] != $_POST['token']){
                                 <?php endforeach; ?>
                               <tr>
                                 <td></td>
-                                <td></td> 
+                                <td></td>
                                 <td></td>
                               </tr>
                               <tr>
                                 <td></td>
-                                <td><strong>Total Qty.: <?php echo $_POST["finalQuantity"]; ?></strong></td> 
-                                <td><strong>Total Price: <?php echo $_POST["finalPrice"]; ?>.00 €</strong></td> 
+                                <td><strong>Total Qty.: <?php echo $_POST["finalQuantity"]; ?></strong></td>
+                                <td><strong>Total Price: <?php echo $_POST["finalPrice"]; ?>.00 €</strong></td>
                               </tr>
                             </table>
                             <p>&nbsp;</p>
-                            <form method="post" id="orderConfirmationForm">
+                            <form method="post" id="orderConfirmationForm" autocomplete="off">
                               <label for="address">Address *</label>
                               <input type="text" name="customerAddress" id="customerAddress" required>
                               <input type="hidden" name="cartDescription" id="cartDescription" value='<?php echo $_POST["hiddencheckout"]; ?>'>
@@ -131,7 +131,7 @@ if($_SESSION['token'] != $_POST['token']){
                     <?php endif; ?>
                 </body>
             </html>
-                      
+
             <?php
         }
     }
