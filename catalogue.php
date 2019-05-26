@@ -28,12 +28,12 @@ if(!isset($_SESSION['token'])){
                 exit();
             } else {
                 ?>
-                          
+
                 <!DOCTYPE html>
                 <html>
-                    <?php if (file_exists(__DIR__ . '/_header.php')): ?>
-                      <?php include_once(__DIR__ . '/_header.php'); ?>
-                    <?php endif; ?>
+              		<?php if (file_exists(__DIR__ . '/_header.php')): ?>
+              	    <?php include_once(__DIR__ . '/_header.php'); ?>
+              	  <?php endif; ?>
                 	<body class="loggedin">
                         <nav class="navtop">
                 			<div>
@@ -49,16 +49,15 @@ if(!isset($_SESSION['token'])){
                           <div class="col-lg-12 col-md-12">
                             <h2 class="text-center">Catalogue</h2>
                             <p>&nbsp;</p>
-                            <?php //SKUs = 'LPN45', 'LPX230U', 'MBP2019U', 'HPP12U' ?>
                             <div class="row text-center">
                             <div class="col-lg-6 col-md-6">
-                            <form action="" id="allProductsForm">
+                            <form action="" id="allProductsForm" autocomplete="off">
                               <input type="hidden" name="token" id="alltoken" value="<?php echo $_SESSION['token']; ?>"/>
                               <input type="submit" class="btn btn-primary" value="Όλα τα προϊόντα">
                             </form>
                             </div>
                             <div class="col-lg-6 col-md-6">
-                            <form action="" id="searchForm">
+                            <form action="" id="searchForm" autocomplete="off">
                               <input type="text" name="searchbar" id="searchbar" placeholder="Search...">
                               <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>"/>
                               <input type="submit" class="btn btn-primary" value="Search">
@@ -73,10 +72,10 @@ if(!isset($_SESSION['token'])){
                           <div class="col-lg-12 col-md-12 text-center product-box">
                             <p>There are <span id="cartcontainer">0</span> items in your cart</p>
                             <p>Total Amount: <span id="carttotal">0</span>.00 €</p>
-                            
+
                             <div class="" id="cartDescription"></div>
-                            
-                            <form action="checkout.php" method="post" id="checkoutform">
+
+                            <form action="checkout.php" method="post" id="checkoutform" autocomplete="off">
                               <input type="hidden" id="finalPrice" name="finalPrice" value="0">
                               <input type="hidden" id="finalQuantity" name="finalQuantity" value="0">
                               <input type="hidden" id="hiddencheckout" name="hiddencheckout">
@@ -115,7 +114,7 @@ if(!isset($_SESSION['token'])){
                                 var createDiv = "<div class='product-box col-lg-4'>";
                                 var endDiv = "</div>";
                                 var beLow = "<br>";
-                                var addToCartForm = "<form id='addToCart" + i + "' action=''><input type='text' class='product-quantity' id='prodquantity" + i +
+                                var addToCartForm = "<form id='addToCart" + i + "' action='' autocomplete='off'><input type='text' class='product-quantity' id='prodquantity" + i +
                                                     "' name='prodquantity" + i + "' value='1' size='2' /><br>" +
                                                     "<input type='hidden' id='price" + i + "' value= '" + data[i].price + "'>" +
                                                     "<input type='hidden' id='prodname" + i + "' value='" + data[i].name + "'>" +
@@ -133,7 +132,7 @@ if(!isset($_SESSION['token'])){
                        }
                      });
                 });
-                
+
                 $("#allProductsForm").submit(function(){
                   $("#result").empty();
                   event.preventDefault();
@@ -152,7 +151,7 @@ if(!isset($_SESSION['token'])){
                             var createDiv = "<div class='product-box col-lg-4'>";
                             var endDiv = "</div>";
                             var beLow = "<br>";
-                            var addToCartForm = "<form id='addToCart" + i + "' action=''><input type='text' class='product-quantity' id='prodquantity" + i +
+                            var addToCartForm = "<form id='addToCart" + i + "' action='' autocomplete='off'><input type='text' class='product-quantity' id='prodquantity" + i +
                                                 "' name='prodquantity" + i + "' value='1' size='2' /><br>" +
                                                 "<input type='hidden' id='price" + i + "' value= '" + data[i].price + "'>" +
                                                 "<input type='hidden' id='prodname" + i + "' value='" + data[i].name + "'>" +
@@ -169,9 +168,9 @@ if(!isset($_SESSION['token'])){
                        }
                      });
                 });
-                
+
                 var cartItems = [];
-                
+
                 function addToCart(formid,quantity,price,product){
                   $(formid).one( "submit", function() {
                     event.preventDefault();
@@ -180,7 +179,7 @@ if(!isset($_SESSION['token'])){
                     prodPrice = parseInt(prodQuantity) * parseInt(itemPrice);
                     prodName = $(product).val();
                     cartToken = $("#cartToken").val();
-                    
+
                     $.ajax({
                           url:"/addtocart.php ",
                           method:"POST",
@@ -196,13 +195,13 @@ if(!isset($_SESSION['token'])){
                             var containerVal = $("#cartcontainer").html();
                             var storeQuantity = parseInt(containerVal) + parseInt(data.prodQuantity);
                             displayCartQuantity.innerHTML = storeQuantity;
-                
+
                             var finalPrice = $("#finalPrice");
                             var displayCartTotal = document.getElementById("carttotal");
                             var containerTotal = $("#carttotal").html();
                             var storeTotal = parseFloat(containerTotal) + parseFloat(data.prodPrice);
                             displayCartTotal.innerHTML = storeTotal;
-                            
+
                             var displayFooterCartTotal = document.getElementById("cartbadge");
                             var footerCartTotal = $("#cartbadge").html();
                             var footerTotal = parseInt(footerCartTotal) + parseInt(data.prodQuantity);
@@ -210,29 +209,29 @@ if(!isset($_SESSION['token'])){
                             if (footerTotal != 0){
                                 $("#cartbadge").css("color", "#ffb556");
                             }
-                            
-                            
+
+
                             var displayCartDescription = document.getElementById("cartDescription");
                             var hiddenCheckoutField = $('#hiddencheckout');
                             displayCartDescription.innerHTML += "<p>" + data.prodQuantity + "<strong> X </strong> " + data.prodName + ", Price: " + data.prodPrice + ".00 €</p><hr>";
-                            
+
                             finalQuantity.val(storeQuantity);
                             finalPrice.val(storeTotal);
-                            
+
                             cartItems.push( [data.prodName, data.prodQuantity, data.prodPrice] );
-                            $('#hiddencheckout').val(JSON.stringify(cartItems));     
+                            $('#hiddencheckout').val(JSON.stringify(cartItems));
                          },
                          error:function(){
                           alert("error");
                          }
                        });
-                       
-                       
-                       
+
+
+
                        console.log(cartItems);
                     });
                 }
-                
+
                 function resetCart(){
                     var finalPriceField = $("input#finalPrice");
                     var finalQuantityField = $("input#finalQuantity");
@@ -249,7 +248,7 @@ if(!isset($_SESSION['token'])){
                 <?php endif; ?>
                   </body>
                 </html>
-                
+
                 <?php
             }
         }
