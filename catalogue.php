@@ -31,13 +31,9 @@ if(!isset($_SESSION['token'])){
                           
                 <!DOCTYPE html>
                 <html>
-                	<head>
-                		<meta charset="utf-8">
-                		<title>Home Page</title>
-                		<?php if (file_exists(__DIR__ . '/_header.php')): ?>
-                	    <?php include_once(__DIR__ . '/_header.php'); ?>
-                	  <?php endif; ?>
-                	</head>
+                    <?php if (file_exists(__DIR__ . '/_header.php')): ?>
+                      <?php include_once(__DIR__ . '/_header.php'); ?>
+                    <?php endif; ?>
                 	<body class="loggedin">
                         <nav class="navtop">
                 			<div>
