@@ -50,13 +50,7 @@ if(!isset($_SESSION['token'])){
                             <h2 class="text-center">Catalogue</h2>
                             <p>&nbsp;</p>
                             <div class="row text-center">
-                            <div class="col-lg-6 col-md-6">
-                            <form action="" id="allProductsForm" autocomplete="off">
-                              <input type="hidden" name="token" id="alltoken" value="<?php echo $_SESSION['token']; ?>"/>
-                              <input type="submit" class="btn btn-primary" value="Όλα τα προϊόντα">
-                            </form>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
+                            <div class="col-lg-12 col-md-12">
                             <form action="" id="searchForm" autocomplete="off">
                               <input type="text" name="searchbar" id="searchbar" placeholder="Search...">
                               <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>"/>
@@ -132,42 +126,41 @@ if(!isset($_SESSION['token'])){
                        }
                      });
                 });
-
-                $("#allProductsForm").submit(function(){
-                  $("#result").empty();
-                  event.preventDefault();
-                  var products = true;
-                  var token = $("input#alltoken").val();
-                  $.ajax({
-                        url:"/products.php ",
-                        method:"POST",
-                        data:{
-                          products: products,
-                          token: token
-                        },
-                        success:function(data) {
-                          var i = 0;
-                          for (var item in data) {
-                            var createDiv = "<div class='product-box col-lg-4'>";
-                            var endDiv = "</div>";
-                            var beLow = "<br>";
-                            var addToCartForm = "<form id='addToCart" + i + "' action='' autocomplete='off'><input type='text' class='product-quantity' id='prodquantity" + i +
-                                                "' name='prodquantity" + i + "' value='1' size='2' /><br>" +
-                                                "<input type='hidden' id='price" + i + "' value= '" + data[i].price + "'>" +
-                                                "<input type='hidden' id='prodname" + i + "' value='" + data[i].name + "'>" +
-                                                "<input type='hidden' id='cartToken' name='cartToken' value='" + token + "'>" +
-                                                "<input type='submit' class='btn btn-danger' onclick='addToCart(addToCart" + i + ",prodquantity" + i + ", price" + i + ", prodname" + i + ")' value='Add to Cart' /></form>";
-                            var product = document.getElementById("result");
-                            product.innerHTML += createDiv + data[i].name + beLow + 'SKU: ' + data[i].code + beLow + 'Price: ' + data[i].price + ' €' + beLow + '<img width="200" height="160" src="/assets/images/' + data[i].image + '" />' + beLow + addToCartForm;
-                            i++;
-                          }
-                          $("#cartinfo").css("display", "");
-                       },
-                       error:function(){
-                        alert("error");
-                       }
-                     });
+                window.addEventListener('DOMContentLoaded', (event) => {
+                    $("#result").empty();
+                    var products = true;
+                    var token = $("input#token").val();
+                    $.ajax({
+                          url:"/products.php ",
+                          method:"POST",
+                          data:{
+                            products: products,
+                            token: token
+                          },
+                          success:function(data) {
+                            var i = 0;
+                            for (var item in data) {
+                              var createDiv = "<div class='product-box col-lg-4'>";
+                              var endDiv = "</div>";
+                              var beLow = "<br>";
+                              var addToCartForm = "<form id='addToCart" + i + "' action='' autocomplete='off'><input type='text' class='product-quantity' id='prodquantity" + i +
+                                                  "' name='prodquantity" + i + "' value='1' size='2' /><br>" +
+                                                  "<input type='hidden' id='price" + i + "' value= '" + data[i].price + "'>" +
+                                                  "<input type='hidden' id='prodname" + i + "' value='" + data[i].name + "'>" +
+                                                  "<input type='hidden' id='cartToken' name='cartToken' value='" + token + "'>" +
+                                                  "<input type='submit' class='btn btn-danger' onclick='addToCart(addToCart" + i + ",prodquantity" + i + ", price" + i + ", prodname" + i + ")' value='Add to Cart' /></form>";
+                              var product = document.getElementById("result");
+                              product.innerHTML += createDiv + data[i].name + beLow + 'SKU: ' + data[i].code + beLow + 'Price: ' + data[i].price + ' €' + beLow + '<img width="200" height="160" src="/assets/images/' + data[i].image + '" />' + beLow + addToCartForm;
+                              i++;
+                            }
+                            $("#cartinfo").css("display", "");
+                         },
+                         error:function(){
+                          alert("error");
+                         }
+                       });
                 });
+
 
                 var cartItems = [];
 
