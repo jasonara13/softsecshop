@@ -52,7 +52,20 @@ if(!isset($_SESSION['token'])){
                             <div class="row text-center">
                             <div class="col-lg-12 col-md-12">
                             <form action="" id="searchForm" autocomplete="off">
-                              <input type="text" name="searchbar" id="searchbar" placeholder="Search...">
+                              <label for="sel1">Product Filters: (select one):</label>
+                              <div class="form-group">
+                                <select class="form-control" id="sel1">
+                                  <option value="1">Product Name</option>
+                                  <option value="2">SKU</option>
+                                  <option value="3">Name / Price ASC</option>
+                                  <option value="4">Name / Price DESC</option>
+                                  <option value="5">SKU / Price ASC</option>
+                                  <option value="6">SKU / Price DESC</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <input type="text" class="form-control" name="searchbar" id="searchbar" placeholder="Search...">
+                              </div>
                               <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>"/>
                               <input type="submit" class="btn btn-primary" value="Search">
                             </form>
@@ -89,18 +102,23 @@ if(!isset($_SESSION['token'])){
                   $("#result").empty();
                   event.preventDefault();
                   var term = $("input#searchbar").val();
+                  if (term == "" || term == " "){
+                    term = "all";
+                  }
+                  var filter = $("select#sel1").val();
                   var token = $("input#token").val();
                   $.ajax({
                         url:"/addtocart.php ",
                         method:"POST",
                         data:{
                           searchbar: term,
+                          filter: filter,
                           token: token
                         },
                         success:function(data) {
-                          if(data == null || typeof data == 'string')  {
+                          if(data == null)  {
                             var product = document.getElementById("result");
-                            product.innerHTML = "<div class='product-box col-lg-12' style='text-align: center;'><span style='color: red;'>No results.</span><br><i>You must provide a valid SKU in order to receive successful results!</i></div>";
+                            product.innerHTML = "<div class='product-box col-lg-12' style='text-align: center;'><span style='color: red;'>No results.</span><br><i>You must provide a valid search filter in order to receive successful results!</i></div>";
                             $("#cartinfo").css("display", "none");
                           } else {
                               var i = 0;
@@ -229,7 +247,7 @@ if(!isset($_SESSION['token'])){
                     var finalPriceField = $("input#finalPrice");
                     var finalQuantityField = $("input#finalQuantity");
                     var displayCartQuantity = document.getElementById("cartcontainer");
-                    var displayCartTotal = document.getElementById("carttotal");
+                    var displayCarnulltTotal = document.getElementById("carttotal");
                     finalPriceField.val(0);
                     finalQuantityField.val(0);
                     displayCartQuantity.innerHTML = 0;
