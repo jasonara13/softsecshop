@@ -18,23 +18,24 @@ else{
     /*
      * SKUs = 'LPN45', 'LPX230U', 'MBP2019U', 'HPP12U'
      */
-     
+
     if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
         session_unset();
         session_destroy();
         header('Location: login.php');
-    	exit();    
+    	exit();
     } else{
         $_SESSION['iddle_state'] = time() + 600;
         require_once("_inc/controller.php");
-        
+
         $db_handle = new SecureDB;
-        
+
         if($_POST["searchbar"]){
-          
+
           if($_POST["searchbar"] != null && $_POST["item"] == null){
-            $sku = $_POST["searchbar"];
-            $productByCode = $db_handle->fetchProducts($sku);
+            $searchInput = $_POST["searchbar"];
+            $searchFilter = $_POST["filter"];
+            $productByCode = $db_handle->fetchProducts($searchInput, $searchFilter);
           }
           unset($_POST["searchbar"]);
           header('Content-Type: application/json');
