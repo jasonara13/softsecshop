@@ -27,13 +27,9 @@ if($_SESSION['token'] != $_POST['token']){
             ?>
             <!DOCTYPE html>
             <html>
-            	<head>
-            		<meta charset="utf-8">
-            		<title>Software Security Eshop</title>
-            		<?php if (file_exists(__DIR__ . '/_header.php')): ?>
-            	    <?php include_once(__DIR__ . '/_header.php'); ?>
-            	  <?php endif; ?>
-            	</head>
+            	<?php if (file_exists(__DIR__ . '/_header.php')): ?>
+            	  <?php include_once(__DIR__ . '/_header.php'); ?>
+            	<?php endif; ?>
             	<body class="loggedin"><?php echo $_SESSION['orderConfirmation']; ?>
             		<nav class="navtop">
             			<div>
