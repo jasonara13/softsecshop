@@ -3,23 +3,23 @@
 class SecureDB {
 
   private $host;
-	private $user;
-	private $password;
-	private $database;
+  private $user;
+  private $password;
+  private $database;
   private $trace;
   private $settings;
-	private $conn;
+  private $conn;
 
-	function __construct() {
+  function __construct() {
     $this->trace = $this->getIniPath();
     $this->settings = $this->setPrivates();
     $this->conn = $this->connectDB();
-	}
+  }
 
-	function connectDB() {
-		$conn = mysqli_connect($this->host,$this->user,$this->password,$this->database);
-		return $conn;
-	}
+  function connectDB() {
+  	$conn = mysqli_connect($this->host,$this->user,$this->password,$this->database);
+  	return $conn;
+  }
 
   function getIniPath(){
     $myPath = str_replace($_SERVER['SERVER_NAME'],"", dirname(__DIR__));
@@ -68,8 +68,54 @@ class SecureDB {
     $stmt->close();
   }
 
-	function fetchProducts($item){
-		$query = 'SELECT * FROM products WHERE code LIKE "%' .$item. '%"';
+  function fetchProducts($item, $filter){
+    switch ($filter) {
+    case 1:
+        if($item == null || $item == " " || $item == "all"){
+          $query = 'SELECT * FROM products';
+        } else {
+          $query = 'SELECT * FROM products WHERE name LIKE "%' .$item. '%"';
+        }
+        break;
+    case 2:
+        if($item == null || $item == " " || $item == "all"){
+          $query = 'SELECT * FROM products';
+        } else {
+          $query = 'SELECT * FROM products WHERE code LIKE "%' .$item. '%"';
+        }
+        break;
+    case 3:
+        if($item == null || $item == " " || $item == "all"){
+            $query = 'SELECT * FROM products ORDER BY price ASC';
+        } else {
+            $query = 'SELECT * FROM products WHERE name LIKE "%' .$item. '%" ORDER BY price ASC';
+        }
+        break;
+    case 4:
+        if($item == null || $item == " " || $item == "all"){
+            $query = 'SELECT * FROM products ORDER BY price DESC';
+        } else {
+            $query = 'SELECT * FROM products WHERE name LIKE "%' .$item. '%" ORDER BY price DESC';
+        }
+        break;
+    case 5:
+        if($item == null || $item == " " || $item == "all"){
+            $query = 'SELECT * FROM products ORDER BY price ASC';
+        } else {
+            $query = 'SELECT * FROM products WHERE code LIKE "%' .$item. '%" ORDER BY price ASC';
+        }
+        break;
+    case 6:
+        if($item == null || $item == " " || $item == "all"){
+            $query = 'SELECT * FROM products ORDER BY price DESC';
+        } else {
+            $query = 'SELECT * FROM products WHERE code LIKE "%' .$item. '%" ORDER BY price DESC';
+        }
+        break;
+    default:
+        $results = null;
+        break;
+      }
 		$result = mysqli_query($this->conn,$query);
 		while($row=mysqli_fetch_assoc($result)) {
 			$results[] = $row;
@@ -84,6 +130,6 @@ class SecureDB {
 			$results[] = $row;
 		}
 		return $results;
-	}
+  }
 }
 ?>
