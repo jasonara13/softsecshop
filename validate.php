@@ -21,7 +21,9 @@ if ($_SESSION['token']==$_POST['token']) {
         require_once("_inc/controller.php");
 
         $db_handle = new SecureDB;
-        $db_handle->usrLogin($_POST['username'], $_POST['password']);
+        $userName = htmlspecialchars($_POST['username']);
+        $userPswd = htmlspecialchars($_POST['password']);
+        $db_handle->usrLogin($userName, $userPswd);
     }
 }
 ?>
