@@ -42,16 +42,21 @@ else{
           echo json_encode($productByCode);
         }
         if($_POST["prodQuantity"] != null && $_POST["prodPrice"] != null){
-          $prodQuantity = (int)$_POST["prodQuantity"];
-          $prodPrice = (float)$_POST["prodPrice"];
-          $prodName = $_POST["prodName"];
-          $itemToCart = array(
-            "prodQuantity" => $prodQuantity,
-            "prodPrice"    => $prodPrice,
-            "prodName"     => $prodName
-          );
-          header('Content-Type: application/json');
-          echo json_encode($itemToCart);
+            if($_POST["prodQuantity"] == 0 || $_POST["prodQuantity"] < 0 || $_POST["prodQuantity"] > 100){
+                $itemToCart = false;
+                echo $itemToCart;
+            } else {
+                $prodQuantity = (int)$_POST["prodQuantity"];
+                $prodPrice = (float)$_POST["prodPrice"];
+                $prodName = $_POST["prodName"];
+                $itemToCart = array(
+                    "prodQuantity" => $prodQuantity,
+                    "prodPrice"    => $prodPrice,
+                    "prodName"     => $prodName
+                );
+                header('Content-Type: application/json');
+                echo json_encode($itemToCart);
+            }
         }
     }
 }
