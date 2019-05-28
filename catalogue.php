@@ -77,9 +77,9 @@ if(!isset($_SESSION['token'])){
                         </div>
                         <div class="row" id="cartinfo" style="display: none;">
                           <div class="col-lg-12 col-md-12 text-center product-box">
-                            <p>There are <span id="cartcontainer">0</span> items in your cart</p>
-                            <p>Total Amount: <span id="carttotal">0</span>.00 €</p>
-
+                            <p id="cartcontainerp">There are <span id="cartcontainer">0</span> items in your cart</p>
+                            <p id="carttotalp">Total Amount: <span id="carttotal">0</span>.00 €</p>
+                            <p id="product-box" class="alert alert-danger" style="display: none;"></p>
                             <div class="" id="cartDescription"></div>
 
                             <form action="checkout.php" method="post" id="checkoutform" autocomplete="off">
@@ -90,7 +90,7 @@ if(!isset($_SESSION['token'])){
                               <input type="hidden" id="go" name="go" value="1">
                               <input type="submit" class="btn btn-primary" name="Submit" value="Checkout">
                             </form>
-                            <p>
+                            <p class="reset-cart">
                                 <button class="btn btn-secondary" id="clearCart" onclick="resetCart()">Reset Cart</button>
                             </p>
                           </div>
@@ -116,6 +116,7 @@ if(!isset($_SESSION['token'])){
                           token: token
                         },
                         success:function(data) {
+                          console.log(data);
                           if(data == null)  {
                             var product = document.getElementById("result");
                             product.innerHTML = "<div class='product-box col-lg-12' style='text-align: center;'><span style='color: red;'>No results.</span><br><i>You must provide a valid search filter in order to receive successful results!</i></div>";
@@ -201,53 +202,67 @@ if(!isset($_SESSION['token'])){
                             token: cartToken
                           },
                           success:function(data) {
-                            var finalQuantity = $("#finalQuantity");
-                            var displayCartQuantity = document.getElementById("cartcontainer");
-                            var containerVal = $("#cartcontainer").html();
-                            var storeQuantity = parseInt(containerVal) + parseInt(data.prodQuantity);
-                            displayCartQuantity.innerHTML = storeQuantity;
-
-                            var finalPrice = $("#finalPrice");
-                            var displayCartTotal = document.getElementById("carttotal");
-                            var containerTotal = $("#carttotal").html();
-                            var storeTotal = parseFloat(containerTotal) + parseFloat(data.prodPrice);
-                            displayCartTotal.innerHTML = storeTotal;
-
-                            var displayFooterCartTotal = document.getElementById("cartbadge");
-                            var footerCartTotal = $("#cartbadge").html();
-                            var footerTotal = parseInt(footerCartTotal) + parseInt(data.prodQuantity);
-                            displayFooterCartTotal.innerHTML = footerTotal;
-                            if (footerTotal != 0){
-                                $("#cartbadge").css("color", "#ffb556");
+                            if(data == false){
+                                var displayInvalidMsg = document.getElementById("product-box");
+                                var displayCartQuantity = document.getElementById("cartcontainer");
+                                var displayCartTotal = document.getElementById("carttotal");
+                                var resetToZero = 0;
+                                displayCartQuantity.innerHTML = resetToZero;
+                                displayCartTotal.innerHTML = resetToZero;
+                                displayInvalidMsg.innerHTML = "You have added an invalid value. Cart has been reset.";
+                                $("#product-box").css("display","");
+                                $("#cartDescription").empty();
+                                $('#hiddencheckout').val(null);
+                                cartItems = [];
+                                
+                                
                             }
-
-
-                            var displayCartDescription = document.getElementById("cartDescription");
-                            var hiddenCheckoutField = $('#hiddencheckout');
-                            displayCartDescription.innerHTML += "<p>" + data.prodQuantity + "<strong> X </strong> " + data.prodName + ", Price: " + data.prodPrice + ".00 €</p><hr>";
-
-                            finalQuantity.val(storeQuantity);
-                            finalPrice.val(storeTotal);
-
-                            cartItems.push( [data.prodName, data.prodQuantity, data.prodPrice] );
-                            $('#hiddencheckout').val(JSON.stringify(cartItems));
+                            else {
+                                var finalQuantity = $("#finalQuantity");
+                                var displayCartQuantity = document.getElementById("cartcontainer");
+                                var containerVal = $("#cartcontainer").html();
+                                var storeQuantity = parseInt(containerVal) + parseInt(data.prodQuantity);
+                                displayCartQuantity.innerHTML = storeQuantity;
+    
+                                var finalPrice = $("#finalPrice");
+                                var displayCartTotal = document.getElementById("carttotal");
+                                var containerTotal = $("#carttotal").html();
+                                var storeTotal = parseFloat(containerTotal) + parseFloat(data.prodPrice);
+                                displayCartTotal.innerHTML = storeTotal;
+    
+                                var displayFooterCartTotal = document.getElementById("cartbadge");
+                                var footerCartTotal = $("#cartbadge").html();
+                                var footerTotal = parseInt(footerCartTotal) + parseInt(data.prodQuantity);
+                                displayFooterCartTotal.innerHTML = footerTotal;
+                                if (footerTotal != 0){
+                                    $("#cartbadge").css("color", "#ffb556");
+                                }
+    
+                                var displayCartDescription = document.getElementById("cartDescription");
+                                var hiddenCheckoutField = $('#hiddencheckout');
+                                displayCartDescription.innerHTML += "<p>" + data.prodQuantity + "<strong> X </strong> " + data.prodName + ", Price: " + data.prodPrice + ".00 €</p><hr>";
+    
+                                finalQuantity.val(storeQuantity);
+                                finalPrice.val(storeTotal);
+    
+                                cartItems.push( [data.prodName, data.prodQuantity, data.prodPrice] );
+                                $('#hiddencheckout').val(JSON.stringify(cartItems));
+                                $("#product-box").css("display","none");
+                            }
                          },
                          error:function(){
                           alert("error");
                          }
                        });
-
-
-
                        console.log(cartItems);
                     });
                 }
-
+                
                 function resetCart(){
                     var finalPriceField = $("input#finalPrice");
                     var finalQuantityField = $("input#finalQuantity");
                     var displayCartQuantity = document.getElementById("cartcontainer");
-                    var displayCarnulltTotal = document.getElementById("carttotal");
+                    var displayCartTotal = document.getElementById("carttotal");
                     finalPriceField.val(0);
                     finalQuantityField.val(0);
                     displayCartQuantity.innerHTML = 0;
