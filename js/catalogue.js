@@ -32,9 +32,9 @@ $("#searchForm").submit(function(){
                                     "' name='prodquantity" + i + "' value='1' size='2' /><br>" +
                                     "<input type='hidden' id='price" + i + "' value= '" + data[i].price + "'>" +
                                     "<input type='hidden' id='prodname" + i + "' value='" + data[i].name + "'>" +
-                                    "<input type='hidden' id='prodname" + i + "' value='" + data[i].name + "'>" +
+                                    "<input type='hidden' id='prodsku" + i + "' value='" + data[i].code + "'>" +
                                     "<input type='hidden' id='cartToken' name='cartToken' value='" + token + "'>" +
-                                    "<input type='submit' class='btn btn-danger' onclick='addToCart(addToCart" + i + ",prodquantity" + i + ", price" + i + ", prodname" + i + ")' value='Add to Cart' /></form>";
+                                    "<input type='submit' class='btn btn-danger' onclick='addToCart(addToCart" + i + ",prodquantity" + i + ", price" + i + ", prodname" + i + ", prodsku" + i + ")' value='Add to Cart' /></form>";
                     product = document.getElementById("result");
                     product.innerHTML += createDiv + data[i].name + beLow + 'SKU: ' + data[i].code + beLow + 'Price: ' + data[i].price + ' €' + beLow + '<img width="200" height="160" src="/assets/images/' + data[i].image + '" />' + beLow + addToCartForm;
                     i++;
@@ -69,8 +69,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                   "' name='prodquantity" + i + "' value='1' size='2' /><br>" +
                                   "<input type='hidden' id='price" + i + "' value= '" + data[i].price + "'>" +
                                   "<input type='hidden' id='prodname" + i + "' value='" + data[i].name + "'>" +
+                                  "<input type='hidden' id='prodsku" + i + "' value='" + data[i].code + "'>" +
                                   "<input type='hidden' id='cartToken' name='cartToken' value='" + token + "'>" +
-                                  "<input type='submit' class='btn btn-danger' onclick='addToCart(addToCart" + i + ",prodquantity" + i + ", price" + i + ", prodname" + i + ")' value='Add to Cart' /></form>";
+                                  "<input type='submit' class='btn btn-danger' onclick='addToCart(addToCart" + i + ",prodquantity" + i + ", price" + i + ", prodname" + i + ", prodsku" + i + ")' value='Add to Cart' /></form>";
                 var product = document.getElementById("result");
                 product.innerHTML += createDiv + data[i].name + beLow + 'SKU: ' + data[i].code + beLow + 'Price: ' + data[i].price + ' €' + beLow + '<img width="200" height="160" src="/assets/images/' + data[i].image + '" />' + beLow + addToCartForm;
                 i++;
@@ -86,7 +87,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 var cartItems = [];
 
-function addToCart(formid,quantity,price,product){
+function addToCart(formid,quantity,price,product,sku){
     $(formid).one( "submit", function() {
         event.preventDefault();
         prodQuantity = $(quantity).val();
@@ -94,6 +95,7 @@ function addToCart(formid,quantity,price,product){
         prodPrice = parseInt(prodQuantity) * parseInt(itemPrice);
         prodName = $(product).val();
         cartToken = $("#cartToken").val();
+        prodSku = $(sku).val();
         var displayCartQuantity = "";
         var displayCartTotal = "";
 
@@ -104,6 +106,7 @@ function addToCart(formid,quantity,price,product){
                 prodQuantity: prodQuantity,
                 prodPrice: prodPrice,
                 prodName: prodName,
+                prodSku: prodSku,
                 token: cartToken
             },
             success:function(data) {
@@ -147,7 +150,7 @@ function addToCart(formid,quantity,price,product){
                     finalQuantity.val(storeQuantity);
                     finalPrice.val(storeTotal);
 
-                    cartItems.push( [data.prodName, data.prodQuantity, data.prodPrice] );
+                    cartItems.push( [data.prodName, data.prodSku, data.prodQuantity, data.prodPrice] );
                     $('#hiddencheckout').val(JSON.stringify(cartItems));
                     $("#product-box").css("display","none");
                 }
