@@ -49,10 +49,12 @@ else{
                 $prodQuantity = (int)$_POST["prodQuantity"];
                 $prodPrice = (float)$_POST["prodPrice"];
                 $prodName = $_POST["prodName"];
+                $prodSku = $_POST["prodSku"];
                 $itemToCart = array(
                     "prodQuantity" => $prodQuantity,
                     "prodPrice"    => $prodPrice,
-                    "prodName"     => $prodName
+                    "prodName"     => $prodName,
+                    "prodSku"      => $prodSku
                 );
                 header('Content-Type: application/json');
                 echo json_encode($itemToCart);
