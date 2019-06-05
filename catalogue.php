@@ -1,6 +1,6 @@
 <?php
 session_start();
-$tokenValidity = $_GET['id'];
+$tokenValidity = htmlspecialchars(htmlspecialchars($_GET['session'], ENT_QUOTES));
 
 if(!isset($_SESSION['token'])){
     session_unset();
