@@ -225,3 +225,11 @@ body {
 }
 
 #cartbadge{font-weight: 700;}
+
+.reset-cart{
+	padding: 20px!important;
+}
+
+.checkout-container{margin-bottom: 100px;}
+
+.checkout-ht{margin-top: 50px;margin-bottom: 100px;}
