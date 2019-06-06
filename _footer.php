@@ -1,9 +1,5 @@
-<?php 
-/*
- * Generic footer of this website
- * contais: Cart badge
- *          Copyright information
- */
+<?php
+
 ?>
 <div class="footer">
     <div class="row">
