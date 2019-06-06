@@ -1,14 +1,3 @@
-<?php
-/*
- * Generic header of this website
- * contais: Bootstrap library (if exists)
- *          jQuery library (if exists)
- *          custom.css file (if exists)
- *          
- * In case a file does not 
- * exists the website dies
- */
-?>
 <?php ?>
 <head>
   <meta charset="utf-8">
@@ -25,8 +14,8 @@
   header("Cache-control: no-store");
   header("Pragma: no-cache");
 ?>
-<?php if (file_exists(__DIR__ . '/css/bootstrap.min.css')): ?>
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
+<?php if (file_exists(__DIR__ . '/css/bootstrap.css')): ?>
+  <link rel="stylesheet" href="/css/bootstrap.css">
 <?php else: ?>
   <?php die('Something went wrong! Please check your directory and try again.'); ?>
 <?php endif; ?>
