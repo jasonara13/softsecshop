@@ -1,20 +1,14 @@
 <?php
 session_start();
-/*
-$startTime = microtime(1);
-$startMem  = memory_get_usage();
-session_cache_limiter('private');
-session_cache_expire(0);
-*/
-$length = 32;
-$_SESSION['token'] = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $length);
+require_once("_inc/token.php");
 $_SESSION['token_expire'] = time() + 3600;
 $_SESSION['iddle_state'] = time() + 600;
 
 if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
     session_unset();
     session_destroy();
-    header('Location: login.php');
+    header( "refresh:3;url=login.php" );
+    echo "Your session has expired. You will have to login again.";
     exit();
 } else {
     $_SESSION['iddle_state'] = time() + 600;
@@ -35,7 +29,9 @@ if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
 
     else if (!file_exists(__DIR__ . '/_header.php'))
     {
-    	die('Something went wrong! Please check your directory and try again.');
+      header( "refresh:3;url=login.php" );
+      die('Something went wrong! Please check your directory and try again.');
+      echo "Your session has expired. You will have to login again.";
     }
     ?>
 
@@ -48,6 +44,7 @@ if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <!-- Dev Creds: user = adm1n && pswd = d3vs3cur1ty -->
                     <form method="post" action="validate.php" autocomplete="off">
                     <div class="form-group">
                       <label for="username">Username</label>
@@ -56,10 +53,10 @@ if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
                     <div class="form-group">
                       <label for="password">Password</label>
                       <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
-                      <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>"/>
+                      <input type="hidden" name="token" value="<?php echo Token::generateToken(); ?>"/>
                     </div>
                     <button type="submit" class="btn btn-primary">Log in</button><br>
-                    <span><i>In case you forgot your password, please contact the system administrator at <a href="mailto:info@administrator.example">info@administrator.example</a></i></span>
+                    <span><i>In case you forgot your password, please contact the system administrator at <a href="mailto:alcaeusdim@gmail.com">alcaeusdim@gmail.com</a></i></span>
                     </form>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
