@@ -5,7 +5,8 @@ $tokenValidity = htmlspecialchars(htmlspecialchars($_GET['session'], ENT_QUOTES)
 if(!isset($_SESSION['token'])){
     session_unset();
     session_destroy();
-    header('Location: login.php');
+    header( "refresh:3;url=login.php" );
+    echo "Invalid Token";
     exit();
 } else {
     if($_SESSION['token'] != $tokenValidity || $_SESSION['token'] == null){
@@ -17,16 +18,19 @@ if(!isset($_SESSION['token'])){
         if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
             session_unset();
             session_destroy();
-            header('Location: login.php');
+            header( "refresh:3;url=login.php" );
+            echo "Your session has expired. You will have to login again.";
             exit();
         } else {
             $_SESSION['iddle_state'] = time() + 600;
             if(!isset($_SESSION['useron'])){
                 session_unset();
                 session_destroy();
-                header('Location: login.php');
+                header( "refresh:3;url=login.php" );
+                echo "Your session has expired. You will have to login again.";
                 exit();
             } else {
+                require_once("_inc/token.php");
                 ?>
 
                 <!DOCTYPE html>
@@ -47,7 +51,7 @@ if(!isset($_SESSION['token'])){
                       <div class="container">
                         <div class="row">
                           <div class="col-lg-12 col-md-12">
-                            <h2 class="text-center">Catalogue</h2>
+                            <h2>Catalogue</h2>
                             <p>&nbsp;</p>
                             <div class="row text-center">
                             <div class="col-lg-12 col-md-12">
@@ -67,6 +71,7 @@ if(!isset($_SESSION['token'])){
                                 <input type="text" class="form-control" name="searchbar" id="searchbar" placeholder="Search...">
                               </div>
                               <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>"/>
+                              <input type="hidden" name="cartToken" id="cartToken" value="<?php echo Token::generateCartToken(); ?>"/>
                               <input type="submit" class="btn btn-primary" value="Search">
                             </form>
                             </div>
@@ -80,13 +85,15 @@ if(!isset($_SESSION['token'])){
                             <p id="cartcontainerp">There are <span id="cartcontainer">0</span> items in your cart</p>
                             <p id="carttotalp">Total Amount: <span id="carttotal">0</span>.00 €</p>
                             <p id="product-box" class="alert alert-danger" style="display: none;"></p>
+                            <p id="reset-box" class="alert alert-success" style="display: none;"></p>
                             <div class="" id="cartDescription"></div>
 
                             <form action="checkout.php" method="post" id="checkoutform" autocomplete="off">
                               <input type="hidden" id="finalPrice" name="finalPrice" value="0">
                               <input type="hidden" id="finalQuantity" name="finalQuantity" value="0">
                               <input type="hidden" id="hiddencheckout" name="hiddencheckout">
-                              <input type="hidden" id="finalToken" name="token" value="<?php echo $_SESSION['token']; ?>">
+                              <input type="hidden" id="token" name="token" value="<?php echo $_SESSION['token']; ?>">
+                              <input type="hidden" id="checkout" name="checkout" value="<?php echo Token::generateCheckoutToken(); ?>">
                               <input type="hidden" id="go" name="go" value="1">
                               <input type="submit" class="btn btn-primary" name="Submit" value="Checkout">
                             </form>
