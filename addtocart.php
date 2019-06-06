@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if($_SESSION['token'] != $_POST['token']){
+if($_SESSION['token'] != $_POST['addToken']){
     session_unset();
     session_destroy();
     header('Location: login.php');
@@ -15,9 +15,6 @@ else{
     	header('Location: login.php');
     	exit();
     }
-    /*
-     * SKUs = 'LPN45', 'LPX230U', 'MBP2019U', 'HPP12U'
-     */
 
     if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
         session_unset();
@@ -26,30 +23,27 @@ else{
     	exit();
     } else{
         $_SESSION['iddle_state'] = time() + 600;
-        require_once("_inc/controller.php");
 
-        $db_handle = new SecureDB;
+        $checkQuantity = htmlspecialchars(htmlspecialchars($_POST['prodQuantity'], ENT_QUOTES));
+        $checkPrice = htmlspecialchars(htmlspecialchars($_POST['prodPrice'], ENT_QUOTES));
+        $checkName = htmlspecialchars(htmlspecialchars($_POST['prodName'], ENT_QUOTES));
+        $checkSKU = htmlspecialchars(htmlspecialchars($_POST['prodSku'], ENT_QUOTES));
 
-        if($_POST["searchbar"]){
-
-          if($_POST["searchbar"] != null && $_POST["item"] == null){
-            $searchInput = $_POST["searchbar"];
-            $searchFilter = $_POST["filter"];
-            $productByCode = $db_handle->fetchProducts($searchInput, $searchFilter);
-          }
-          unset($_POST["searchbar"]);
-          header('Content-Type: application/json');
-          echo json_encode($productByCode);
-        }
-        if($_POST["prodQuantity"] != null && $_POST["prodPrice"] != null){
-            if($_POST["prodQuantity"] == 0 || $_POST["prodQuantity"] < 0 || $_POST["prodQuantity"] > 100){
-                $itemToCart = false;
-                echo $itemToCart;
+        if(!empty($checkQuantity)){
+            if($checkQuantity <= "0" || $checkQuantity >= "101"){
+                $itemToCart = array(
+                    "prodQuantity" => "false",
+                    "prodPrice"    => "false",
+                    "prodName"     => "false",
+                    "prodSku"      => "false"
+                );
+                header('Content-Type: application/json');
+                echo json_encode($itemToCart);
             } else {
-                $prodQuantity = (int)$_POST["prodQuantity"];
-                $prodPrice = (float)$_POST["prodPrice"];
-                $prodName = $_POST["prodName"];
-                $prodSku = $_POST["prodSku"];
+                $prodQuantity = (int)$checkQuantity;
+                $prodPrice = (float)$checkPrice;
+                $prodName = $checkName;
+                $prodSku = $checkSKU;
                 $itemToCart = array(
                     "prodQuantity" => $prodQuantity,
                     "prodPrice"    => $prodPrice,
@@ -59,6 +53,15 @@ else{
                 header('Content-Type: application/json');
                 echo json_encode($itemToCart);
             }
+        } elseif(empty($checkQuantity)){
+          $itemToCart = array(
+              "prodQuantity" => "false",
+              "prodPrice"    => "false",
+              "prodName"     => "false",
+              "prodSku"      => "false"
+          );
+          header('Content-Type: application/json');
+          echo json_encode($itemToCart);
         }
     }
 }
