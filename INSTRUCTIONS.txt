@@ -1,0 +1,23 @@
+Database setup
+--------------
+mysql -u root -p
+create database secshop;
+\q
+
+mysql -u root -p secshop < greypand_secshop.sql
+systemctl restart mysql
+
+Reminder: remember to make necessary changes at the db.ini according to your setup
+
+nginx setup
+-----------
+cp nginxconfs/nginx.conf /etc/nginx/nginx.conf
+cp nginxconfs/softsecshop /etc/nginx/sites-available/
+ln -s /etc/nginx/sites-available/softsecshop /etc/nginx/sites-enabled/softsecshop
+
+website setup
+-------------
+mkdir /var/www/softsecshop
+cp -R website/* /var/www/softsecshop/
+chown -R www-data:www-data /var/www/*
+systemctl restart nginx
