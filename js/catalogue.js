@@ -142,4 +142,51 @@ function addToCart(formid,quantity,price,product,sku,token){
                     var finalPrice = $("#finalPrice");
                     displayCartTotal = document.getElementById("carttotal");
                     var containerTotal = $("#carttotal").html();
-                    var storeTotal = parseFloat(c
+                    var storeTotal = parseFloat(containerTotal) + parseFloat(data.prodPrice);
+                    displayCartTotal.innerHTML = storeTotal;
+
+                    var displayFooterCartTotal = document.getElementById("cartbadge");
+                    var footerCartTotal = $("#cartbadge").html();
+                    var footerTotal = parseInt(footerCartTotal) + parseInt(data.prodQuantity);
+                    displayFooterCartTotal.innerHTML = footerTotal;
+                    if (footerTotal !== 0){
+                        $("#cartbadge").css("color", "#ffb556");
+                    }
+
+                    var displayCartDescription = document.getElementById("cartDescription");
+                    var hiddenCheckoutField = $('#hiddencheckout');
+                    displayCartDescription.innerHTML += "<p>" + data.prodQuantity + "<strong> X </strong> " + data.prodName + ", Price: " + data.prodPrice + ".00 €</p><hr>";
+
+                    finalQuantity.val(storeQuantity);
+                    finalPrice.val(storeTotal);
+
+                    cartItems.push( [data.prodName, data.prodSku, data.prodQuantity, data.prodPrice] );
+                    $('#hiddencheckout').val(JSON.stringify(cartItems));
+                    $("#product-box").css("display","none");
+                    $("#reset-box").css("display","none");
+                    console.log(cartItems);
+                }
+            },
+            error:function(){
+                console.log("error");
+            }
+        });
+        console.log(cartItems);
+    });
+}
+
+function resetCart(){
+    var displayInvalidMsg = document.getElementById("reset-box");
+    displayCartQuantity = document.getElementById("cartcontainer");
+    displayCartTotal = document.getElementById("carttotal");
+    var cartBadge = document.getElementById("cartbadge");
+    var resetToZero = 0;
+    displayCartQuantity.innerHTML = resetToZero;
+    displayCartTotal.innerHTML = resetToZero;
+    cartBadge.innerText = resetToZero;
+    displayInvalidMsg.innerHTML = "Cart has been reset.";
+    $("#reset-box").css("display","");
+    $("#cartDescription").empty();
+    $('#hiddencheckout').val(null);
+    cartItems = [];
+}
