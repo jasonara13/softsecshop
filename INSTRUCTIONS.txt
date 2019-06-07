@@ -1,8 +1,15 @@
+Git pull the latest
+-------------------
+cd /tmp/
+git clone --single-branch --branch dev https://github.com/Alcaeusd/softsecshop.git
+cd softsecshop
+
 Database setup
 --------------
 mysql -u root -p
 create database secshop;
 \q
+
 
 mysql -u root -p secshop < accounts.sql
 mysql -u root -p secshop < products.sql
@@ -18,16 +25,20 @@ EXIT;
 
 systemctl restart mysql
 
-Reminder: remember to copy and make necessary changes at the db.ini according to your setup. Copy path is /var/www/
+Reminder: remember to make necessary changes at the db.ini according to your setup
 
 nginx setup
 -----------
+cd /tmp/softsecshop/
 cp nginxconfs/nginx.conf /etc/nginx/nginx.conf
 cp nginxconfs/softsecshop /etc/nginx/sites-available/
+rm /etc/nginx/sites-enabled/softsecshop
 ln -s /etc/nginx/sites-available/softsecshop /etc/nginx/sites-enabled/softsecshop
 
 website setup
 -------------
+cd /tmp/softsecshop/
+rm -rf /var/www/*
 mkdir /var/www/softsecshop
 cp -R website/* /var/www/softsecshop/
 chown -R www-data:www-data /var/www/*
