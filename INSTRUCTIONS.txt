@@ -4,10 +4,21 @@ mysql -u root -p
 create database secshop;
 \q
 
-mysql -u root -p secshop < greypand_secshop.sql
+mysql -u root -p secshop < accounts.sql
+mysql -u root -p secshop < products.sql
+mysql -u root -p secshop < orders.sql
+
+sudo mysql -u root -p
+
+CREATE USER 'secshopuser'@'localhost' IDENTIFIED BY 'softsecpassword';
+GRANT ALL ON secshop.* TO 'secshopuser'@'localhost' IDENTIFIED BY 'softsecpassword' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+EXIT;
+
 systemctl restart mysql
 
-Reminder: remember to make necessary changes at the db.ini according to your setup
+Reminder: remember to copy and make necessary changes at the db.ini according to your setup. Copy path is /var/www/
 
 nginx setup
 -----------
