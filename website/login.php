@@ -55,6 +55,7 @@ if(time() >= $_SESSION['token_expire'] && time() >= $_SESSION['iddle_state']){
                       <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
                       <input type="hidden" name="token" value="<?php echo Token::generateToken(); ?>"/>
                     </div>
+                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
                     <button type="submit" class="btn btn-primary">Log in</button><br>
                     <span><i>In case you forgot your password, please contact the system administrator at <a href="mailto:alcaeusdim@gmail.com">alcaeusdim@gmail.com</a></i></span>
                     </form>
