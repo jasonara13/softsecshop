@@ -21,11 +21,10 @@ CREATE USER 'secshopuser'@'localhost' IDENTIFIED BY 'softsecpassword';
 GRANT ALL ON secshop.* TO 'secshopuser'@'localhost' IDENTIFIED BY 'softsecpassword' WITH GRANT OPTION;
 
 FLUSH PRIVILEGES;
-EXIT;
 
 systemctl restart mysql
 
-Reminder: remember to make necessary changes at the db.ini according to your setup
+Reminder: remember to make necessary changes at the db.ini according to your setup (username, password, database)
 
 nginx setup
 -----------
@@ -41,5 +40,6 @@ cd /tmp/softsecshop/
 rm -rf /var/www/*
 mkdir /var/www/softsecshop
 cp -R website/* /var/www/softsecshop/
+cp db.ini /var/www/
 chown -R www-data:www-data /var/www/*
 systemctl restart nginx

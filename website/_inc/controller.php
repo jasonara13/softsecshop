@@ -27,7 +27,7 @@ class SecureDB {
     }
 
     function setPrivates(){
-    $config = parse_ini_file($this->trace . "db.ini");
+    $config = parse_ini_file($this->trace . "/db.ini");
     $this->host = $config["host"];
     $this->user = $config["user"];
     $this->password = $config["pswd"];
