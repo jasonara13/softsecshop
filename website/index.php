@@ -50,4 +50,10 @@ if (!isset($_SESSION['useron'], $_SESSION['token'])) {
 			 </html>
 			 <?php
 		 }
+	else{
+		session_unset();
+		session_destroy();
+		header("refresh:3;url=login.php");
+		echo "Ivalid Token.";
+	}
 }
