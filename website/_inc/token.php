@@ -16,6 +16,7 @@ class Token {
   public static function tokenValidity($token){
     if(isset($_SESSION['token']) && $token === $_SESSION['token']){
       unset($_SESSION['token']);
+      session_regenerate_id();
       return true;
     }
     return false;
@@ -31,6 +32,7 @@ class Token {
   public static function checkoutTokenValidity($token){
     if(isset($_SESSION['cart-checkout']) && $token === $_SESSION['cart-checkout']){
       unset($_SESSION['cart-checkout']);
+      session_regenerate_id();
       return true;
     }
     return false;
