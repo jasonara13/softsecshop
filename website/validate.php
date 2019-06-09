@@ -2,6 +2,14 @@
 session_start();
 require_once("_inc/token.php");
 if($_SESSION['token'] != $_POST['token']){
+    session_unset($_SESSION['useron']);
+    session_unset($_SESSION['token']);
+    session_unset($_SESSION['token_expire']);
+    session_unset($_SESSION['iddle_state']);
+    session_unset($_SESSION['cart-token']);
+    session_unset($_SESSION['cart-checkout']);
+    session_unset($_SESSION['name']);
+    session_unset($_SESSION['id']);
     session_unset();
     session_destroy();
     header( "refresh:3;url=login.php" );
@@ -12,6 +20,14 @@ if($_SESSION['token'] != $_POST['token']){
 //if ($_SESSION['token']==$_POST['token']) {
 if(Token::tokenValidity($_POST['token'])){
   if (time() >= $_SESSION['token_expire'] || time() >= $_SESSION['iddle_state']) {
+    session_unset($_SESSION['useron']);
+    session_unset($_SESSION['token']);
+    session_unset($_SESSION['token_expire']);
+    session_unset($_SESSION['iddle_state']);
+    session_unset($_SESSION['cart-token']);
+    session_unset($_SESSION['cart-checkout']);
+    session_unset($_SESSION['name']);
+    session_unset($_SESSION['id']);
     session_unset();
     session_destroy();
     header( "refresh:3;url=login.php" );
